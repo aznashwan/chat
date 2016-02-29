@@ -30,3 +30,7 @@
 
 # Debug files
 *.dSYM/
+
+# JetBrains + OSX
+.DS_Store
+.idea/
