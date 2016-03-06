@@ -34,3 +34,6 @@
 # JetBrains + OSX
 .DS_Store
 .idea/
+
+# ycm conf pyc's
+*.pyc
