@@ -54,7 +54,7 @@ int server(int port, server_func_t f) {
     struct sockaddr_in caddr, saddr;
     int sockadd_in_size = SOCKADDR_IN_SIZE;
     char* client_ip;
-    char *msgbuf = (char *) malloc(1024);
+    char *msgbuf = (char *) malloc(STDTRANS_SIZE);
     pthread_t thread;
 
     // setup the server socket:
@@ -177,6 +177,15 @@ int write_to_sock(int fd, void* buff, int len) {
     return total;
 }
 
+// write_str_to_sock is a convenience wrapper around write_to_sock which
+// specially handles writing a string to the given socket file descriptor.
+// It returns -1 on error or the number of characters of the string written
+// (which is bound to be the strlen() + 1 due to the added EOF character).
+// See write_to_sock for more details.
+int write_str_to_sock(int fd, char* str) {
+    return write_to_sock(fd, str, strlen(str) + 1);
+}
+
 // read_from_sock is a convenience function which reads from a socket given by
 // a file descriptor a given number of bytes into the given buffer.
 // It returns the number of bytes read, or a negative number on error.
@@ -204,4 +213,18 @@ int read_from_sock(int fd, void* buff, int len) {
     }
 
     return total;
+}
+
+// read_str_from sock is a wrapper around read_from_sock which is optimized for
+// handling strings. It automatically adds an EOF to the result, thus the given
+// length should always be the expected length plus one.
+// See read_from_sock for more details.
+int read_str_from_sock(int fd, char* str, int len) {
+    int rd = read_from_sock(fd, str, len);
+    if (rd < 0) {
+        return -1;
+    }
+
+    *(str + rd - 1) = '\0';
+    return rd;
 }

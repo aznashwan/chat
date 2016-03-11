@@ -10,6 +10,10 @@
 // indicate the end of a transmission.
 #define TERMINATION_CHAR '\0'
 
+// For consistency among various sub-modules of the code, a standard definition
+// of a normal transmission size is useful.
+#define STDTRANS_SIZE 1024
+
 // the maximum number of connection requests to be backlogged
 // while waiting to be accepted:
 #define MAX_BACKLOG 5
@@ -54,10 +58,23 @@ int open_socket();
 //  mksockaddr("", 5656);            // server-side
 struct sockaddr_in mksockaddr(char* addr, int portno);
 
+// write_str_to_sock is a convenience wrapper around write_to_sock which
+// specially handles writing a string to the given socket file descriptor.
+// It returns -1 on error or the number of characters of the string written
+// (which is bound to be the strlen() + 1 due to the added EOF character).
+// See write_to_sock for more details.
+int write_str_to_sock(int fd, char* str);
+
 // write_to_sock is a convenience function to write from the specified buffer
 // to the file descriptor of a socket the given number of bytes.
 // It returns the number of bytes written or a negative number on error.
 int write_to_sock(int fd, void* message, int len);
+
+// read_str_from sock is a wrapper around read_from_sock which is optimized for
+// handling strings. It automatically adds an EOF to the result, thus the given
+// length should always be the expected length plus one.
+// See read_from_sock for more details.
+int read_str_from_sock(int fd, char* str, int len);
 
 // read_from_sock is a convenience function which reads from a socket given by
 // a file descriptor a given number of bytes into the given buffer.

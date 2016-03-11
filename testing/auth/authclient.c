@@ -1,9 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <strings.h>
-#include <unistd.h>
 
 #include "socklib.h"
+
 
 int main(int argc, char* argv[]) {
     if (argc != 3) {
@@ -18,22 +18,28 @@ int main(int argc, char* argv[]) {
         return -2;
     }
 
-    // write a message:
-    char msg[STDTRANS_SIZE] = "This is the message that should be echoed.";
-    if (write_str_to_sock(sockfd, msg) < 0) {
-        printf("Error writing on socket.");
+    // attempt auth:
+    char* uname = "aznashwan";
+    char* pass = "sockmaster";
+
+    if (write_str_to_sock(sockfd, uname) < 0) {
+        printf("Error writing username on socket.");
         return -3;
     }
 
-    // recieve the response:
-    bzero(msg, STDTRANS_SIZE);
-    if(read_str_from_sock(sockfd, msg, STDTRANS_SIZE) < 0) {
-        printf("Error reading from socket.");
+    if (write_str_to_sock(sockfd, pass) < 0) {
+        printf("Error writing password on socket.");
         return -4;
     }
 
-    // print the recieved result:
-    printf("%s\n", msg);
+    // recieve the response:
+    char msg[STDTRANS_SIZE];
+    bzero(msg, STDTRANS_SIZE);
+    if(read_str_from_sock(sockfd, msg, STDTRANS_SIZE) < 0) {
+        printf("Error reading response from socket.");
+        return -4;
+    }
 
-    close(sockfd);
+    printf("%s\n", msg);
 }
+

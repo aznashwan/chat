@@ -1,24 +1,26 @@
-#include <stdlib.h>
 #include <stdio.h>
+#include <stdlib.h>
 
 #include "debug.h"
 #include "socklib.h"
 
 
 void* serv_func(void *sockfd) {
-    char* buff = (char *) malloc(1024);
+    char* buff = (char *) malloc(STDTRANS_SIZE);
     int* fd = (int *) sockfd;
     int res;
 
-    res = read_from_sock(*fd, buff, 1024);
+    res = read_str_from_sock(*fd, buff, STDTRANS_SIZE);
     if (res < 0) {
         debug("serv_func: error reading incoming request.");
+        free(buff);
+        free(sockfd);
         return NULL;
     }
 
     printf("%s\n", buff);
 
-    res = write_to_sock(*fd, buff, strlen(buff) + 1);
+    res = write_str_to_sock(*fd, buff);
     if (res < 0) {
         debug("serv_func: error writing response.");
     }
