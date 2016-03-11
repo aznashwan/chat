@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <strings.h>
 
+#include "debug.h"
 #include "socklib.h"
 
 
@@ -22,11 +23,13 @@ int main(int argc, char* argv[]) {
     char* uname = "aznashwan";
     char* pass = "sockmaster";
 
+    debug("writing username to server");
     if (write_str_to_sock(sockfd, uname) < 0) {
         printf("Error writing username on socket.");
         return -3;
     }
 
+    debug("writing password to server");
     if (write_str_to_sock(sockfd, pass) < 0) {
         printf("Error writing password on socket.");
         return -4;
@@ -34,12 +37,10 @@ int main(int argc, char* argv[]) {
 
     // recieve the response:
     char msg[STDTRANS_SIZE];
-    bzero(msg, STDTRANS_SIZE);
-    if(read_str_from_sock(sockfd, msg, STDTRANS_SIZE) < 0) {
+    if(read_str_from_sock(sockfd, msg, STDTRANS_SIZE - 1) < 0) {
         printf("Error reading response from socket.");
         return -4;
     }
 
     printf("%s\n", msg);
 }
-

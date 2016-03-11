@@ -5,6 +5,14 @@
 #include "debug.h"
 #include "socklib.h"
 
+
+const struct creds_t CREDENTIALS[] = {
+    { .uname = "aznashwan"    , .upass = "sockmaster" },
+    { .uname = "luciantoo"    , .upass = "toolucian"  },
+    { .uname = "thevladeffect", .upass = "vladspass"  },
+    { .uname = NULL, .upass = NULL }
+};
+
 // auth_connection is a helper function which, given the file descriptor of
 // a freshly-accepted connection, blocks until both a username and a password
 // are provided. If all was well, a pointer to the username of the newly
@@ -20,6 +28,7 @@ char* auth_connection(int sockfd) {
         free(upass);
         return (char *) -1;
     }
+    debug(uname);
 
     if (read_str_from_sock(sockfd, upass, STDTRANS_SIZE - 1) < 0) {
         debug("auth_connection: error on reading password from socket.");
@@ -27,12 +36,13 @@ char* auth_connection(int sockfd) {
         free(upass);
         return (char *) -1;
     }
+    debug(upass);
 
     if(!verify_creds(CREDENTIALS, uname, upass)) {
         debug("auth_connection: invalid credentials provided.");
         free(uname);
         free(upass);
-        return (char *) -2;
+        return NULL;
     }
 
     free(upass);

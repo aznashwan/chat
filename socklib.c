@@ -197,7 +197,7 @@ int read_from_sock(int fd, void* buff, int len) {
     int rest = len;
 
     while (rest > 0) {
-        rd = read(fd, buff, rest);
+        rd = read(fd, buff, 1);
 
         if (rd == -1) {
             return -1;
@@ -225,6 +225,6 @@ int read_str_from_sock(int fd, char* str, int len) {
         return -1;
     }
 
-    *(str + rd - 1) = '\0';
+    *(str + rd) = '\0';
     return rd;
 }

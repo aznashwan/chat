@@ -10,12 +10,7 @@ struct creds_t {
     char* upass;
 };
 
-struct creds_t CREDENTIALS[] = {
-    { .uname = "aznashwan"    , .upass = "sockmaster" },
-    { .uname = "luciantoo"    , .upass = "toolucian"  },
-    { .uname = "thevladeffect", .upass = "vladspass"  },
-    { .uname = NULL, .upass = NULL }
-};
+extern const struct creds_t CREDENTIALS[];
 
 // auth_connection is a helper function which, given the file descriptor of
 // a freshly-accepted connection, blocks until both a username and a password
