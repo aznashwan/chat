@@ -1,5 +1,6 @@
 FLAGS=-Wall
 COMPILER=clang
+# COMPILER=gcc -lpthread
 
 BASEFILES={socklib,debug}
 

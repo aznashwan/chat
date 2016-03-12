@@ -1,10 +1,6 @@
 #ifndef _DEBUG_H
 #define _DEBUG_H
 
-#include <strings.h>
-#include <stdio.h>
-#include <stdlib.h>
-
 #define DEBUG 1
 #define HEADER "DEBUG: "
 

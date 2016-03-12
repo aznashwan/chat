@@ -4,7 +4,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <unistd.h>
-#include <strings.h>
+#include <string.h>
 #include <sys/types.h>
 #include <sys/socket.h>
 
@@ -140,7 +140,7 @@ struct sockaddr_in mksockaddr(char* addr, int portno) {
     struct sockaddr_in sockaddr;
 
     // initialise and apply generic params:
-    bzero((char*) &sockaddr, sizeof(struct sockaddr_in));
+    memset(&sockaddr, '\0', sizeof(struct sockaddr_in));
     sockaddr.sin_port = htons(portno);
     sockaddr.sin_family = AF_INET;  // IPv4
 

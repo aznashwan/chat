@@ -1,5 +1,5 @@
 #include <stdlib.h>
-#include <strings.h>
+#include <string.h>
 
 #include "auth.h"
 #include "debug.h"
@@ -28,7 +28,6 @@ char* auth_connection(int sockfd) {
         free(upass);
         return (char *) -1;
     }
-    debug(uname);
 
     if (read_str_from_sock(sockfd, upass, STDTRANS_SIZE - 1) < 0) {
         debug("auth_connection: error on reading password from socket.");
@@ -36,7 +35,6 @@ char* auth_connection(int sockfd) {
         free(upass);
         return (char *) -1;
     }
-    debug(upass);
 
     if(!verify_creds(CREDENTIALS, uname, upass)) {
         debug("auth_connection: invalid credentials provided.");
@@ -62,6 +60,8 @@ int verify_creds(struct creds_t* creds, char* uname, char* upass) {
             strcmp(creds -> upass, upass) == 0) {
             return 1;
         }
+
+        creds = creds + 1;
     }
 
     return 0;

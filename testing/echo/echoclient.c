@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <strings.h>
+#include <string.h>
 #include <unistd.h>
 
 #include "socklib.h"
@@ -26,7 +26,7 @@ int main(int argc, char* argv[]) {
     }
 
     // recieve the response:
-    bzero(msg, STDTRANS_SIZE);
+    memset(msg, '\0', STDTRANS_SIZE);
     if(read_str_from_sock(sockfd, msg, STDTRANS_SIZE) < 0) {
         printf("Error reading from socket.");
         return -4;
