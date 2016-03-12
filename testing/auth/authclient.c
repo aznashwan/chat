@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <unistd.h>
 
 #include "debug.h"
 #include "socklib.h"
@@ -21,22 +22,27 @@ int main(int argc, char* argv[]) {
     // attempt auth:
     debug("writing username to server");
     if (write_str_to_sock(sockfd, argv[3]) < 0) {
-        printf("Error writing username on socket.");
+        printf("Error writing username on socket.\n");
+        close(sockfd);
         return -3;
     }
 
     debug("writing password to server");
     if (write_str_to_sock(sockfd, argv[4]) < 0) {
-        printf("Error writing password on socket.");
+        printf("Error writing password on socket.\n");
+        close(sockfd);
         return -4;
     }
 
     // recieve the response:
     char msg[STDTRANS_SIZE];
     if(read_str_from_sock(sockfd, msg, STDTRANS_SIZE - 1) < 0) {
-        printf("Error reading response from socket.");
-        return -4;
+        printf("Error reading response from socket.\n");
+        close(sockfd);
+        return -5;
     }
 
     printf("%s\n", msg);
+
+    close(sockfd);
 }

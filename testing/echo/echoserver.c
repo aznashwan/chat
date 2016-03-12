@@ -5,7 +5,7 @@
 #include "socklib.h"
 
 
-void* serv_func(void *sockfd) {
+void* serv_func(void* sockfd) {
     char* buff = (char *) malloc(STDTRANS_SIZE);
     int* fd = (int *) sockfd;
     int res;
@@ -13,9 +13,7 @@ void* serv_func(void *sockfd) {
     res = read_str_from_sock(*fd, buff, STDTRANS_SIZE);
     if (res < 0) {
         debug("serv_func: error reading incoming request.");
-        free(buff);
-        free(sockfd);
-        return NULL;
+        goto cleanup;
     }
 
     printf("%s\n", buff);
@@ -25,6 +23,7 @@ void* serv_func(void *sockfd) {
         debug("serv_func: error writing response.");
     }
 
+cleanup:
     free(buff);
     free(sockfd);
     return NULL;

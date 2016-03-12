@@ -3,8 +3,11 @@
 
 #define DEBUG 1
 #define HEADER "DEBUG: "
+#define MAX_DBMSG_LEN 1024
 
-// prints the given message to standard error:
+// prints the given message to standard error. The message will be truncated
+// to MAX_DBMSG_LEN if it is longer. Any memory allocated for the message
+// is not freed and is left to the caller's discretion.
 void debug(char* message);
 
 // get_ip_addr_str is a helper function which, given the unsigned int

@@ -5,16 +5,19 @@
 #include "debug.h"
 
 
-// prints the given message to standard error:
+// prints the given message to standard error. The message will be truncated
+// to MAX_DBMSG_LEN if it is longer. Any memory allocated for the message
+// is not freed and is left to the caller's discretion.
 void debug(char* message) {
     if (!DEBUG) return;
 
-    char* buff = (char *) malloc(strlen(HEADER) + strlen(message) + 2);
+    char* buff = (char *) malloc(MAX_DBMSG_LEN);
     strcpy(buff, HEADER);
     strcat(buff, message);
     strcat(buff, "\n");
 
     fputs(buff, stderr);
+
     free(buff);
 }
 

@@ -12,8 +12,9 @@ void* serv_func(void* sockfd) {
     char* username;
     char* response;
     int* fd = (int *) sockfd;
-    char* dbmsg = (char *) malloc(80 + STDTRANS_SIZE);
+    char* dbmsg = (char *) malloc(MAX_DBMSG_LEN);
 
+    // attempt to authenticate the connection:
     username = auth_connection(*fd);
     if (username < 0) {
         debug("serv_func: error authenticating connection.");
@@ -21,6 +22,7 @@ void* serv_func(void* sockfd) {
         return NULL;
     }
 
+    // check result:
     if (username != NULL) {
         sprintf(dbmsg, "Succesfully authenticated '%s'.", username);
         response = "Congratulations, you've been authenticated.";
@@ -32,6 +34,7 @@ void* serv_func(void* sockfd) {
     debug(dbmsg);
     free(dbmsg);
 
+    // write the response:
     if (write_str_to_sock(*fd, response) < 0) {
         debug("serv_func: error writing response to socket.");
     }
